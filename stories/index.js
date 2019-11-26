@@ -13,6 +13,10 @@ import InterviewerList from "components/InterviewerList";
 import Appointment from "components/Appointment";
 import Header from "components/Appointment/Header";
 import Empty from "components/Appointment/Empty";
+import Show from "components/Appointment/Show";
+import Confirm from "components/Appointment/Confirm";
+import Status from "components/Appointment/Status";
+import Error from "components/Appointment/Error";
 
 // ==================BUTTON==================
 storiesOf("Button", module)
@@ -144,7 +148,7 @@ storiesOf("Button", module)
        backgrounds:[{name: "white", value:"#fff", default: true}]
      })
      .add("Appointment", () => <Appointment/>)
-     .add("Appointment", () => 
+     .add("Appointment with Time", () => 
        <Appointment
        time = "12pm"
        />
@@ -152,4 +156,27 @@ storiesOf("Button", module)
      .add("Header", ()=> <Header time ="12pm"/>)
      .add("Empty", () => <Empty 
           onAdd={action("onAdd")}
-          />)
+        />
+    )
+    .add("Show", ()=> <Show 
+          student= "Dasha The Busy Bee"
+          interviewer = {interviewer}
+          onEdit = {action("onEdit")}
+          onDelete = {action("onDelete")}
+        />
+    )
+    .add("Confirm", () => <Confirm 
+          message="Are you sure that you want to delete the appointment>"
+          onConfirm={action("onConfirm")}
+          onCancel={action("onCancel")}
+        />
+    )
+    .add("Status", () => <Status 
+          message ="Deleting"
+        />
+    )
+    .add("Error", ()=> <Error 
+          message="Could not delete appointment"
+          onClose={action("onClose")}
+        />
+    )
