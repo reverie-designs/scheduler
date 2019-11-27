@@ -1,4 +1,4 @@
-import DayList from "components/DayList";
+// import DayList from "components/DayList";
 
 // import React from "react";
 
@@ -15,3 +15,18 @@ export function getAppointmentsForDay(state, day) {
     }
 };
 
+export function getInterview(state, interview) {
+  
+  if (interview) {
+    let student = interview.student;
+    let id = interview.interviewer;
+    let result = {};
+    if (state.appointments[id]){
+      result.student = student;
+      result.interviewer = state.interviewers[id];
+      return result;
+    } 
+  } else {
+      return null;
+  }
+};
