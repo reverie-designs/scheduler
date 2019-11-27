@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Fragment} from "react";
 
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -17,6 +17,7 @@ import Show from "components/Appointment/Show";
 import Confirm from "components/Appointment/Confirm";
 import Status from "components/Appointment/Status";
 import Error from "components/Appointment/Error";
+import Form from "components/Appointment/Form";
 
 // ==================BUTTON==================
 storiesOf("Button", module)
@@ -153,6 +154,22 @@ storiesOf("Button", module)
        time = "12pm"
        />
      )
+     .add("Appointment Empty", () => (
+      <Fragment>
+        <Appointment id={1} time="12pm" />
+        <Appointment id="last" time="1pm" />
+      </Fragment>
+    ))
+    .add("Appointment Booked", () => (
+      <Fragment>
+        <Appointment
+          id={1}
+          time="12pm"
+          interview={{ student: "Lydia Miller-Jones", interviewer }}
+        />
+        <Appointment id="last" time="1pm" />
+      </Fragment>
+    ))
      .add("Header", ()=> <Header time ="12pm"/>)
      .add("Empty", () => <Empty 
           onAdd={action("onAdd")}
@@ -166,7 +183,7 @@ storiesOf("Button", module)
         />
     )
     .add("Confirm", () => <Confirm 
-          message="Are you sure that you want to delete the appointment>"
+          message="Are you sure that you want to delete the appointment?"
           onConfirm={action("onConfirm")}
           onCancel={action("onCancel")}
         />
@@ -180,3 +197,23 @@ storiesOf("Button", module)
           onClose={action("onClose")}
         />
     )
+    .add("Form Create", () => <Form 
+          interviewers={interviewers}
+          onSave={action("onSave")}
+          onCancel={action("onCancel")}
+        />
+    )
+    .add("Form Edit", () => <Form 
+          name="Busy Bee"
+          interviewers={interviewers}
+          onSave={action("onSave")}
+          onCancel={action("onCancel")}
+        />
+    )
+    .add("Form Cancel", () => <Form 
+          interviewers={interviewers}
+          onSave={action("onSave")}
+          onCancel={action("onCancel")}
+        />
+    )
+    
