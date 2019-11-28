@@ -8,7 +8,7 @@ export default function Button(props) {
    "button--confirm": props.confirm, 
    "button--danger": props.danger
    });
-
+   console.log(props);
    return (
    <button 
       className={buttonClass}
