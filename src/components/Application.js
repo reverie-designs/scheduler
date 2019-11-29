@@ -40,30 +40,51 @@ export default function Application(props) {
   //returns an array of objects for that day's interviewers
   const interviewers = getInterviewersForDay(state, state.day);
 
-  //geting info for new appointment
+  //booking new interview in available appointment spot
   const bookInterview = (id, interview) => {
-    console.log("THIS IS appointment id", id, "THis is ", interview);
+    // console.log("THIS IS appointment id", id, "THis is ", interview);
     // console.log(interview);
-    //appointment object
+
+    //updating available appointment object
     const appointment = {
       ...state.appointments[id],
-      interview: {... interview }
+      interview: {...interview }
     };
-
-    //adding new appointment
+    console.log('THIS IS new APP info', appointment);
+    //adding new appointment to appointments
     const appointments = {
       ...state.appointments,
       [id]: appointment
     };
-    
-    return axios.put(`http://localhost:8000/api/appointments/${id}`, {interview})
+    console.log("THIS IS NEW AAPSS info", appointments);
+    //integer to update db
+    const newId = Number(id);
+    return axios.put(`http://localhost:8000/api/appointments/${newId}`, {interview})
           .then(() => {
             setState(prev => ({...state, appointments}))
           })
           
   }; //closes bookInterview
 
-  //takes in the current day's appointment array and returns a components for each appointment in the array     
+  //Deleting Interview
+  const deleteInterview = (id) => {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    }
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    const newId = Number(id);
+
+    return axios.delete(`http://localhost:8000/api/appointments/${newId}`)
+      .then(()=>{
+        setState(prev=>({...state, appointments}))
+      })
+  }; //closes deleting interview
+
+  //takes in the current day's appointments array and returns a components for each appointment in the array     
   const printAppoints = appointments.map(appointment => {
     const interview = getInterview(state, appointment.interview);
       return (
@@ -74,6 +95,7 @@ export default function Application(props) {
           interview={interview}
           interviewers = {interviewers}
           bookInterview = {bookInterview}
+          deleteInterview = {deleteInterview}
         />
       )
   }); 
