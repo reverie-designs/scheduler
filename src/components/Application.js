@@ -15,11 +15,13 @@ export default function Application(props) {
     appointments: {},
   });
 
-
+  //allows to change state on selected day
   const setDay = day => setState({ ...state, day });
 
 
-  // Loads days from api once at page load
+  // Loads data from api once at page load
+  // then add  them to states that are being tracked 
+
   useEffect(()=>{
     Promise.all([
       axios.get("http://localhost:8000/api/days"), 
@@ -34,10 +36,34 @@ export default function Application(props) {
 
   //returns an array of object for the current day's appointments
   const appointments =  getAppointmentsForDay(state, state.day);
+
   //returns an array of objects for that day's interviewers
   const interviewers = getInterviewersForDay(state, state.day);
 
-  //takes in the above array and returns a components for each appointment in the array     
+  //geting info for new appointment
+  const bookInterview = (id, interview) => {
+    console.log("THIS IS appointment id", id, "THis is ", interview);
+    // console.log(interview);
+    //appointment object
+    const appointment = {
+      ...state.appointments[id],
+      interview: {... interview }
+    };
+
+    //adding new appointment
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    
+    return axios.put(`http://localhost:8000/api/appointments/${id}`, {interview})
+          .then(() => {
+            setState(prev => ({...state, appointments}))
+          })
+          
+  }; //closes bookInterview
+
+  //takes in the current day's appointment array and returns a components for each appointment in the array     
   const printAppoints = appointments.map(appointment => {
     const interview = getInterview(state, appointment.interview);
       return (
@@ -47,13 +73,18 @@ export default function Application(props) {
           time={appointment.time}
           interview={interview}
           interviewers = {interviewers}
+          bookInterview = {bookInterview}
         />
       )
   }); 
 
+  //due to css neeed to add this at appointments render for last appoint
   let lastApp = <Appointment key="last" time="5pm" />;
   printAppoints.push(lastApp);
 
+  
+
+  //actual render
   return (
     <main className="layout">
 
@@ -83,7 +114,9 @@ export default function Application(props) {
       </section>
 
       <section className="schedule">
+
        {printAppoints}
+
       </section>
 
     </main>
