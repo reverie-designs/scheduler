@@ -17,9 +17,6 @@ export default function useVisualMode(initial) {
       setHistory(initial);
       setMode(mode);
     } else {
-      // let newHistory = [...history];
-      // newHistory.splice(newHistory.length-1, 1);
-      // setHistory(history => history.slice(1));
       setHistory(([ _ ,...history])=> history);
       setMode(history[0]);
     }   
