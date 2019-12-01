@@ -1,16 +1,58 @@
 // eslint-disable-next-line 
-import React, {useState, useEffect} from "react";
-import axios from "axios";
-export default function useApplicationData(initial) {
+import React, {useEffect, useReducer} from "react"
+import axios from "axios"
+
+
+const SET_DAY = "SET_DAY"
+const SET_APPLICATION_DATA = "SET_APPLICATION_DATA"
+const SET_INTERVIEW = "SET_INTERVIEW"
+
+// ==== REDUCER ==== //
+const reducer = (state, action) => {
+  switch (action.type) {
+    // ==== SET DAY ==== /
+    //allows to change state on selected day
+    case SET_DAY:
+      return { ...state, day: action.day }
+
+    case SET_APPLICATION_DATA:
+      return { ...state, days: action.days, appointments: action.appointments, interviewers: action.interviewers}
+
+    case SET_INTERVIEW: {
+
+      //updating available appointment object
+      const appointment = {
+        ...state.appointments[action.id],
+        interview: (action.interview ? {...action.interview} : null)
+      };
+
+      //adding new appointment to appointments
+      const appointments = {
+        ...state.appointments,
+        [action.id]: appointment
+      }
+
+      return {  ...state, id: action.id, appointments: appointments }
+    }
+    default:
+      throw new Error(
+        `Tried to reduce with unsupported action type: ${action.type}`
+      )
+  }
+}
+
+export default function useApplicationData() {
   
-  // ==== STATE ==== //
+  // ==== STATE using REDUCER ==== //
   //manages all tracked states of the app
-  const [state, setState] = useState({
+  const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],
     appointments: {},
-  });
+    // interviewers: {}
+  })
 
+  
   // ==== DB REQUEST ON APP LOAD ====//
   // Loads data from api then add to states that are being tracked 
   useEffect(()=>{
@@ -20,67 +62,43 @@ export default function useApplicationData(initial) {
       axios.get("http://localhost:8000/api/interviewers"), 
     ])
     .then((all)=> {
-        setState(prev => ({...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data}));
-      });
+        dispatch({type: SET_APPLICATION_DATA, days: all[0].data, appointments: all[1].data, interviewers: all[2].data});
+      })
     }, []
-  ); //close useEffect
+  ) //close useEffect
 
 
   // ==== SET DAY ==== /
-  //allows to change state on selected day
-  const setDay = day => setState({ ...state, day });
+  // allows to change state on selected day
+  const setDay = day => dispatch({ type: SET_DAY, day })
 
 
   // ==== BOOKING INTERVIEW ==== //
   // booking new interview in available appointment spot
   const bookInterview = (id, interview) => {
-
-    //updating available appointment object
-    const appointment = {
-      ...state.appointments[id],
-      interview: {...interview }
-    };
-
-    //adding new appointment to appointments
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-
     //to integer to update db
     const newId = Number(id);
-
     //db update
     return axios.put(`http://localhost:8000/api/appointments/${newId}`, {interview})
           .then(() => {
-            setState(prev => ({...state, appointments}))
+            dispatch({type: SET_INTERVIEW, id, interview}) 
           })
           
-  }; //closes bookInterview
+  } //closes bookInterview
 
 
   
   // ==== Deleting Interview ==== //
   const deleteInterview = (id) => {
-
-    const appointment = {
-      ...state.appointments[id],
-      interview: null
-    };
-
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
     const newId = Number(id);
 
     return axios.delete(`http://localhost:8000/api/appointments/${newId}`)
       .then(()=>{
-        setState(prev=>({...state, appointments}))
+        dispatch({type: SET_INTERVIEW, id})
       })
-  }; //closes deleting interview
+  } //closes deleting interview
 
 
   return {state, setDay, bookInterview, deleteInterview};
-};
+}
 
