@@ -11,11 +11,10 @@ export function getAppointmentsForDay(state, day) {
       let thisDayApps = filteredAppointments[0].appointments;
       const results =[];
       thisDayApps.forEach(app => results.push(state.appointments[`${app}`]))
-
-      // console.log('APPOINTMENST',results);
       return results;
     }
 };
+
 
 export function getInterview(state, interview) {
   
