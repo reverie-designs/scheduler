@@ -7,11 +7,11 @@ const SET_DAY = "SET_DAY"
 const SET_APPLICATION_DATA = "SET_APPLICATION_DATA"
 const SET_INTERVIEW = "SET_INTERVIEW"
 
+
 // ==== REDUCER ==== //
 const reducer = (state, action) => {
   switch (action.type) {
-    // ==== SET DAY ==== /
-    //allows to change state on selected day
+
     case SET_DAY:
       return { ...state, day: action.day }
 
@@ -34,6 +34,7 @@ const reducer = (state, action) => {
 
       return {  ...state, id: action.id, appointments: appointments }
     }
+
     default:
       throw new Error(
         `Tried to reduce with unsupported action type: ${action.type}`
@@ -68,32 +69,35 @@ export default function useApplicationData() {
   ) //close useEffect
 
 
-  // ==== SET DAY ==== /
+  // ==== SET DAY ==== //
   // allows to change state on selected day
   const setDay = day => dispatch({ type: SET_DAY, day })
-
-
+  
+  
   // ==== BOOKING INTERVIEW ==== //
   // booking new interview in available appointment spot
   const bookInterview = (id, interview) => {
+    
+    const dayId = state.days.filter(day => day.name === state.day)[0].id;
     //to integer to update db
     const newId = Number(id);
     //db update
     return axios.put(`http://localhost:8000/api/appointments/${newId}`, {interview})
           .then(() => {
+            state.days[dayId-1].spots--
             dispatch({type: SET_INTERVIEW, id, interview}) 
-          })
+          })   
           
   } //closes bookInterview
 
 
-  
   // ==== Deleting Interview ==== //
   const deleteInterview = (id) => {
+    const dayId = state.days.filter(day => day.name === state.day)[0].id;
     const newId = Number(id);
-
     return axios.delete(`http://localhost:8000/api/appointments/${newId}`)
       .then(()=>{
+        state.days[dayId-1].spots++
         dispatch({type: SET_INTERVIEW, id})
       })
   } //closes deleting interview
