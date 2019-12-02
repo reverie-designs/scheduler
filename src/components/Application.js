@@ -34,7 +34,7 @@ export default function Application(props) {
       )
   }); 
 
-
+  
   //due to css neeed to add this at appointments render for last appoint
   let lastApp = <Appointment key="last" time="5pm" />;
   printAppoints.push(lastApp);
