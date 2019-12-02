@@ -14,5 +14,5 @@ export default function DayList(props) {
       />
     )
   })
- return printDays;
+ return printDays
 }

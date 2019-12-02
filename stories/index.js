@@ -1,23 +1,23 @@
-import React, {Fragment} from "react";
+import React, {Fragment} from "react"
 
-import { storiesOf } from "@storybook/react";
-import { action } from "@storybook/addon-actions";
+import { storiesOf } from "@storybook/react"
+import { action } from "@storybook/addon-actions"
 
-import "index.scss";
+import "index.scss"
 
-import Button from "components/Button";
-import DayListItem from "components/DayListItem";
-import DayList from "components/DayList";
-import InterviewerListItem from "components/InterviewerListItem";
-import InterviewerList from "components/InterviewerList";
-import Appointment from "components/Appointment";
-import Header from "components/Appointment/Header";
-import Empty from "components/Appointment/Empty";
-import Show from "components/Appointment/Show";
-import Confirm from "components/Appointment/Confirm";
-import Status from "components/Appointment/Status";
-import Error from "components/Appointment/Error";
-import Form from "components/Appointment/Form";
+import Button from "components/Button"
+import DayListItem from "components/DayListItem"
+import DayList from "components/DayList"
+import InterviewerListItem from "components/InterviewerListItem"
+import InterviewerList from "components/InterviewerList"
+import Appointment from "components/Appointment"
+import Header from "components/Appointment/Header"
+import Empty from "components/Appointment/Empty"
+import Show from "components/Appointment/Show"
+import Confirm from "components/Appointment/Confirm"
+import Status from "components/Appointment/Status"
+import Error from "components/Appointment/Error"
+import Form from "components/Appointment/Form"
 
 // ==================BUTTON==================
 storiesOf("Button", module)
@@ -34,7 +34,7 @@ storiesOf("Button", module)
     <Button disabled onClick={action("button-clicked")}>
       Disabled
     </Button>
-  ));
+  ))
 
 //=================DayListItem=====================
   storiesOf("DayListItem", module)
@@ -46,7 +46,7 @@ storiesOf("Button", module)
     .add("Full", () => <DayListItem name="Monday" spots={0} />)
     .add("Clickable", () => (
       <DayListItem name="Tuesday" setDay={action("setDay")} spots={5} /> 
-    ));
+    ))
 
     const days = [
       {
@@ -64,7 +64,7 @@ storiesOf("Button", module)
         name: "Wednesday",
         spots: 0,
       },
-    ];
+    ]
 
     // =======================DayList==========================
     storiesOf("DayList", module)
@@ -76,7 +76,7 @@ storiesOf("Button", module)
     ))
     .add("Tuesday", () => (
       <DayList days={days} day={"Tuesday"} setDay={action("setDay")} />
-    ));
+    ))
 
 
     //==================== InterviewerListItem=======================
@@ -85,7 +85,7 @@ storiesOf("Button", module)
       id: 1,
       name: "Sylvia Palmer",
       avatar: "https://i.imgur.com/LpaY82x.png"
-    };
+    }
     
     storiesOf("InterviewerListItem", module)
       .addParameters({
@@ -113,7 +113,7 @@ storiesOf("Button", module)
           avatar={interviewer.avatar}
           setInterviewer={event => action("setInterviewer")(interviewer.id)}
         />
-      ));
+      ))
 
       // =========================InterviewerList==========
 
@@ -123,7 +123,7 @@ storiesOf("Button", module)
         { id: 3, name: "Mildred Nazir", avatar: "https://i.imgur.com/T2WwVfS.png" },
         { id: 4, name: "Cohana Roy", avatar: "https://i.imgur.com/FK8V841.jpg" },
         { id: 5, name: "Sven Jones", avatar: "https://i.imgur.com/twYrpay.jpg" }
-      ];
+      ]
       
       storiesOf("InterviewerList", module)
         .addParameters({
@@ -141,7 +141,7 @@ storiesOf("Button", module)
             value={3}
             onChange={action("setInterviewer")}
           />
-        ));
+        ))
 
     //============= APPOINTMENT =================
     storiesOf("Appointment", module)

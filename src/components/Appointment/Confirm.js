@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import Button from "../Button"
 
 export default function Confrim({message, onCancel, onConfirm}) {
@@ -10,5 +10,5 @@ export default function Confrim({message, onCancel, onConfirm}) {
         <Button danger onClick={onConfirm}>Confirm</Button>
       </section>
     </main>
-  );
+  )
 }

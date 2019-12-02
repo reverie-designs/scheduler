@@ -1,22 +1,22 @@
-import React from "react";
-import "components/Application.scss";
-import DayList from "components/DayList";
-import Appointment from "components/Appointment";
-import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
-import useApplicationData from "../hooks/useApplicationData";
+import React from "react"
+import "components/Application.scss"
+import DayList from "components/DayList"
+import Appointment from "components/Appointment"
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors"
+import useApplicationData from "../hooks/useApplicationData"
 
 export default function Application(props) {
   
   //Manages APP state
-  const {state, setDay, bookInterview, deleteInterview} = useApplicationData();
+  const {state, setDay, bookInterview, deleteInterview} = useApplicationData()
 
 
   //returns an array of object for the current day's appointments
-  const appointments =  getAppointmentsForDay(state, state.day);
+  const appointments =  getAppointmentsForDay(state, state.day)
 
 
   //returns an array of objects for that day's interviewers
-  const interviewers = getInterviewersForDay(state, state.day);
+  const interviewers = getInterviewersForDay(state, state.day)
 
 
   //takes in the current day's appointments array and returns a components for each appointment in the array     
@@ -32,12 +32,12 @@ export default function Application(props) {
           deleteInterview = {deleteInterview}
         />
       )
-  }); 
+  }) 
 
   
   //due to css neeed to add this at appointments render for last appoint
   let lastApp = <Appointment key="last" time="5pm" />;
-  printAppoints.push(lastApp);
+  printAppoints.push(lastApp)
 
   
   //render
@@ -78,5 +78,5 @@ export default function Application(props) {
       </section>
 
     </main>
-  );
+  )
 }

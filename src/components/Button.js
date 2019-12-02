@@ -1,6 +1,6 @@
-import React from "react";
-import "components/Button.scss";
-import classnames from "classnames";
+import React from "react"
+import "components/Button.scss"
+import classnames from "classnames"
 
 
 export default function Button(props) {
@@ -17,5 +17,5 @@ export default function Button(props) {
    >
       {props.children}
    </button>
-   ); //button test
+   ) //button test
 }

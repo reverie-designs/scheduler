@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 
 export default function Status({message}) {
   return (
@@ -10,5 +10,5 @@ export default function Status({message}) {
       />
       <h1 className="text--semi-bold">{message}</h1>
     </main>
-  );
+  )
 }

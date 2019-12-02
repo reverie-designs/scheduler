@@ -1,24 +1,24 @@
 // eslint-disable-next-line
-import React from "react";
-import "./styles.scss";
-import Header from "./Header";
-import Show from "./Show";
-import Empty from "./Empty";
-import Form from "./Form";
-import Status from "./Status";
-import Confirm from "./Confirm";
-import Error from "./Error";
-import useVisualMode from "../../hooks/useVisualMode";
+import React from "react"
+import "./styles.scss"
+import Header from "./Header"
+import Show from "./Show"
+import Empty from "./Empty"
+import Form from "./Form"
+import Status from "./Status"
+import Confirm from "./Confirm"
+import Error from "./Error"
+import useVisualMode from "../../hooks/useVisualMode"
 
-const EMPTY = "EMPTY";
-const SHOW = "SHOW";
-const CREATE = "CREATE";
-const SAVING = "SAVING";
-const DELETING = "DELETING";
-const CONFIRM = "CONFIRM";
-const EDIT = "EDIT";
-const ERROR_SAVE = "ERROR_SAVE";
-const ERROR_DELETE = "ERROR_DELETE";
+const EMPTY = "EMPTY"
+const SHOW = "SHOW"
+const CREATE = "CREATE"
+const SAVING = "SAVING"
+const DELETING = "DELETING"
+const CONFIRM = "CONFIRM"
+const EDIT = "EDIT"
+const ERROR_SAVE = "ERROR_SAVE"
+const ERROR_DELETE = "ERROR_DELETE"
 
 const message = {
                     save: "Saving",
@@ -29,31 +29,30 @@ const message = {
 }
 export default function Appointment({id, time, interviewers, interview, bookInterview, deleteInterview}) {
 
-  const {mode, transition, back} = useVisualMode( interview ? SHOW : EMPTY);
+  const {mode, transition, back} = useVisualMode( interview ? SHOW : EMPTY)
 
   const save = (name, interviewer) => {
     transition(SAVING);
     const interview = {
       student: name,
       interviewer: interviewer
-    };
+    }
 
     bookInterview(id, interview)
     .then(() => transition(SHOW))
     .catch(error => {transition(ERROR_SAVE, true)})
-  };
+  }
 
   const deleting = () => {
     transition(CONFIRM);
-  };
+  }
 
   const confirmDelete = () => {
     transition(DELETING, true)
     deleteInterview(id)
     .then(()=> transition(EMPTY))
-    .catch(error => {transition(ERROR_DELETE, true)})
-      
-  };
+    .catch(error => {transition(ERROR_DELETE, true)})     
+  }
 
   return (
   <article className="appointment">
@@ -86,5 +85,5 @@ export default function Appointment({id, time, interviewers, interview, bookInte
     {mode === ERROR_SAVE && <Error message={message.saveError} onClose = {back}/>}
     {mode === ERROR_DELETE && <Error message={message.deleteError} onClose = {back}/>}
   </article>
-  );
+  )
 }
