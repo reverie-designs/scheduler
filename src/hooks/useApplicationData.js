@@ -63,7 +63,7 @@ export default function useApplicationData() {
       axios.get("http://localhost:8000/api/interviewers"), 
     ])
     .then((all)=> {
-        dispatch({type: SET_APPLICATION_DATA, days: all[0].data, appointments: all[1].data, interviewers: all[2].data});
+        dispatch({type: SET_APPLICATION_DATA, days: all[0].data, appointments: all[1].data, interviewers: all[2].data})
       })
     }, []
   ) //close useEffect
@@ -73,18 +73,26 @@ export default function useApplicationData() {
   // allows to change state on selected day
   const setDay = day => dispatch({ type: SET_DAY, day })
   
-  
+
   // ==== BOOKING INTERVIEW ==== //
   // booking new interview in available appointment spot
   const bookInterview = (id, interview) => {
+
+    //current day
+    const dayId = state.days.filter(day => day.name === state.day)[0].id
+
+    // does current appoint allready have an interivew scheduled - is this an edit
+    let interviewExistence = state.appointments[id].interview
     
-    const dayId = state.days.filter(day => day.name === state.day)[0].id;
     //to integer to update db
-    const newId = Number(id);
+    const newId = Number(id)
+    
     //db update
     return axios.put(`http://localhost:8000/api/appointments/${newId}`, {interview})
           .then(() => {
-            state.days[dayId-1].spots--
+            if (!interviewExistence){
+              state.days[dayId-1].spots--
+            }
             dispatch({type: SET_INTERVIEW, id, interview}) 
           })   
           
@@ -93,8 +101,8 @@ export default function useApplicationData() {
 
   // ==== Deleting Interview ==== //
   const deleteInterview = (id) => {
-    const dayId = state.days.filter(day => day.name === state.day)[0].id;
-    const newId = Number(id);
+    const dayId = state.days.filter(day => day.name === state.day)[0].id
+    const newId = Number(id)
     return axios.delete(`http://localhost:8000/api/appointments/${newId}`)
       .then(()=>{
         state.days[dayId-1].spots++
@@ -103,6 +111,6 @@ export default function useApplicationData() {
   } //closes deleting interview
 
 
-  return {state, setDay, bookInterview, deleteInterview};
+  return {state, setDay, bookInterview, deleteInterview}
 }
 
