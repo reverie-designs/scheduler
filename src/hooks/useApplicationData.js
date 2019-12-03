@@ -62,11 +62,10 @@ export default function useApplicationData() {
   // ==== DB REQUEST ON APP LOAD ====//
   // Loads data from api then add to states that are being tracked 
   useEffect(()=>{
-    console.log("===========================axios", axios.defaults);
     Promise.all([
-      axios.get("http://localhost:8000/api/days"), 
-      axios.get("http://localhost:8000/api/appointments"), 
-      axios.get("http://localhost:8000/api/interviewers"), 
+      axios.get("/api/days"), 
+      axios.get("/api/appointments"), 
+      axios.get("/api/interviewers"), 
     ])
     .then((all)=> {
         dispatch({type: SET_APPLICATION_DATA, days: all[0].data, appointments: all[1].data, interviewers: all[2].data})
@@ -89,7 +88,7 @@ export default function useApplicationData() {
     const newId = Number(id)
     
     //db update
-    return axios.put(`http://localhost:8000/api/appointments/${newId}`, {interview})
+    return axios.put(`/api/appointments/${newId}`, {interview})
           .then(() => {
             if (!interviewExistence){
               state.days[dayId-1].spots--
