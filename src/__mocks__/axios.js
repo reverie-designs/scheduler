@@ -61,12 +61,11 @@ export default {
   
   get: jest.fn(url => {
     if (url === "/api/days") {
-      console.log("GETTING")
+      
       return Promise.resolve({
         status: 200,
         statusText: "OK",
         data: fixtures.days
-        // console.log()
       });
     }
 
@@ -85,11 +84,14 @@ export default {
         data: fixtures.interviewers
       });
     }
-    // if (url === "api/appointments/:id") {
-    //   return Promise.resolve({
-    //     status: 204, 
-    //     statusText: "No Content" 
-    //   });
-    // }
+   
+  }),
+  put: jest.fn(url => {
+    if (url === "api/appointments/:id", {}) {
+      return Promise.resolve({
+        status: 204, 
+        statusText: "No Content" 
+      });
+    }
   })
 }
