@@ -1,14 +1,10 @@
 import React from "react"
-import { render, cleanup, waitForElement, getByText, prettyDOM, getAllByTestId, getByAltText, getByPlaceholderText } from "@testing-library/react"
+import { render, cleanup, waitForElement, getByText, prettyDOM, getAllByTestId, getByAltText, getByPlaceholderText, queryByText } from "@testing-library/react"
 import { fireEvent } from "@testing-library/react";
 import Application from "../Application"
-// import axios from "axios";
-// ===== PLEASE NOTE: BOTH DB AND MAIN SERVERS MUST BE RUNNING IN-ORDER FOR THE TEST TO PASS
-afterEach(cleanup)
-// jest.mock('axios');
 
-// jest.mock("/Users/dasha/lighthouse/REACT/scheduler/src/__mocks__ /axios.js")
-// // /Users/dasha/lighthouse/REACT/scheduler/src/__mocks__ /axios.js
+afterEach(cleanup)
+
 describe("Application", () => {
   it("changes the schedule when a new day is selected", async () => {
     const { getByText } = render(<Application />);
@@ -20,27 +16,33 @@ describe("Application", () => {
     expect(getByText("Leopold Silvers")).toBeInTheDocument();
   });
 
-  // it("loads data, books an interview and reduces the spots remaining for Monday by 1", async () => {
-  //   const { container } = render(<Application />);
+  it("loads data, books an interview and reduces the spots remaining for Monday by 1", async () => {
+    const { container, debug } = render(<Application />);
   
-  //   await waitForElement(() => getByText(container, "Archie Cohen"));
+    await waitForElement(() => getByText(container, "Archie Cohen"));
   
-  //   const appointments = getAllByTestId(container, "appointment");
-  //   const appointment = appointments[0];
-  
-  //   fireEvent.click(getByAltText(appointment, "Add"));
-  
-  //   fireEvent.change(getByPlaceholderText(appointment, /enter student name/i), {
-  //     target: { value: "Lydia Miller-Jones" }
-  //   });
+    const appointments = getAllByTestId(container, "appointment");
 
-  //   fireEvent.click(getByAltText(appointment, "Samantha Stanic"));
+    const appointment = appointments[0];
   
-  //   fireEvent.click(getByText(appointment, "Save"));
+    fireEvent.click(getByAltText(appointment, "Add"));
   
-  //   console.log(prettyDOM(appointment));
-  // });
+    fireEvent.change(getByPlaceholderText(appointment, /enter student name/i), {
+      target: { value: "Lydia Miller-Jones" }
+    });
+
+    fireEvent.click(getByAltText(appointment, "Sylvia Palmer"));
+  
+    fireEvent.click(getByText(appointment, "Save"));
+
+    expect(getByText(appointment, "Saving")).toBeInTheDocument();
+
+    await waitForElement(() => queryByText(appointment, "Lydia Miller-Jones"));
+
+    const day = getAllByTestId(container, "day").find(day => queryByText(day, "Monday"));
+
+    expect(getByText(day, "no spots remaining")).toBeInTheDocument();
+
+  });
 
 });
-
-//"Jamal Jordan" "Samantha Stanic"
