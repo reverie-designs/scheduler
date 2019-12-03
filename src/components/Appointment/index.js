@@ -27,6 +27,7 @@ const message = {
                     deleteError: "Couldn't Delete. Please try again later.",
                     confirm: "Are you sure you wish to delete this appointment?"
 }
+
 export default function Appointment({id, time, interviewers, interview, bookInterview, deleteInterview}) {
 
   const {mode, transition, back} = useVisualMode( interview ? SHOW : EMPTY)
@@ -55,7 +56,7 @@ export default function Appointment({id, time, interviewers, interview, bookInte
   }
 
   return (
-  <article className="appointment">
+  <article className="appointment" data-testid="appointment">
     <Header time={time}/>
     {mode === EMPTY && <Empty onAdd={()=>transition(CREATE)} />}
     {mode === SHOW && (

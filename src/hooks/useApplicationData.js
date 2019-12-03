@@ -62,6 +62,7 @@ export default function useApplicationData() {
   // ==== DB REQUEST ON APP LOAD ====//
   // Loads data from api then add to states that are being tracked 
   useEffect(()=>{
+    console.log("===========================axios", axios.defaults);
     Promise.all([
       axios.get("http://localhost:8000/api/days"), 
       axios.get("http://localhost:8000/api/appointments"), 
