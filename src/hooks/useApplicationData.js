@@ -44,8 +44,8 @@ const reducer = (state, action) => {
 
 export default function useApplicationData() {
   
-  // ==== STATE using REDUCER ==== //
-  //manages all tracked states of the app
+  // ==== INITIAL STATE ==== //
+  //manages all tracked states of the app this is 
   const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],
@@ -53,7 +53,12 @@ export default function useApplicationData() {
     // interviewers: {}
   })
 
+
+  // ==== SET DAY ==== //
+  // allows to change state on selected day
+  const setDay = day => dispatch({ type: SET_DAY, day })
   
+
   // ==== DB REQUEST ON APP LOAD ====//
   // Loads data from api then add to states that are being tracked 
   useEffect(()=>{
@@ -65,15 +70,9 @@ export default function useApplicationData() {
     .then((all)=> {
         dispatch({type: SET_APPLICATION_DATA, days: all[0].data, appointments: all[1].data, interviewers: all[2].data})
       })
-    .catch(error => console.log(error))
     }, []
   )//close useEffect
 
-
-  // ==== SET DAY ==== //
-  // allows to change state on selected day
-  const setDay = day => dispatch({ type: SET_DAY, day })
-  
 
   // ==== BOOKING INTERVIEW ==== //
   // booking new interview in available appointment spot
@@ -82,7 +81,7 @@ export default function useApplicationData() {
     //current day
     const dayId = state.days.filter(day => day.name === state.day)[0].id
 
-    // does current appoint allready have an interivew scheduled - is this an edit
+    // checks if current appoint allready has an interivew scheduled - is this an edit?
     let interviewExistence = state.appointments[id].interview
     
     //to integer to update db
@@ -95,17 +94,22 @@ export default function useApplicationData() {
               state.days[dayId-1].spots--
             }
             dispatch({type: SET_INTERVIEW, id, interview}) 
-          })   
-          
+          })       
   } //closes bookInterview
 
 
   // ==== Deleting Interview ==== //
   const deleteInterview = (id) => {
+
+    //current day
     const dayId = state.days.filter(day => day.name === state.day)[0].id
+    
+    //to integer to update db
     const newId = Number(id)
+
+    //db update
     return axios.delete(`http://localhost:8000/api/appointments/${newId}`)
-      .then(()=>{
+      .then(() => {
         state.days[dayId-1].spots++
         dispatch({type: SET_INTERVIEW, id})
       })
