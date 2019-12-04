@@ -7,6 +7,29 @@ const SET_DAY = "SET_DAY"
 const SET_APPLICATION_DATA = "SET_APPLICATION_DATA"
 const SET_INTERVIEW = "SET_INTERVIEW"
 
+// ==== HeLPER FUNCTION === //
+
+// const getSpots = (updatedAppointments) => {
+//   let spotsRemainingPerDay = [];
+//   let spotsLeftInDay = 0;
+//   let appointmentSlotsCounter = 0;
+  
+//   //loop through each appointment slot to count empty slots (null)
+//   for (let appointment of Object.values(updatedAppointments)) {
+//     if (!appointment.interview) {
+//       spotsLeftInDay++;
+//     }
+//     appointmentSlotsCounter++;
+//     //when day is finished, reset counters to check next day
+//     if (appointmentSlotsCounter === 5) {
+//       spotsRemainingPerDay.push(spotsLeftInDay);
+//       spotsLeftInDay = 0;
+//       appointmentSlotsCounter = 0;
+//     }
+//   }
+//   return spotsRemainingPerDay;
+// }
+
 
 // ==== REDUCER ==== //
 const reducer = (state, action) => {
@@ -18,23 +41,54 @@ const reducer = (state, action) => {
     case SET_APPLICATION_DATA:
       return { ...state, days: action.days, appointments: action.appointments, interviewers: action.interviewers}
 
+    // case SET_INTERVIEW: {
+
+    //   //updating available appointment object
+    //   const appointment = {
+    //     ...state.appointments[action.id],
+    //     interview: (action.interview ? {...action.interview} : null)
+    //   };
+
+    //   //adding new appointment to appointments
+    //   const appointments = {
+    //     ...state.appointments,
+    //     [action.id]: appointment
+    //   }
+
+    //   // const arr = getSpots(appointments);          
+    //   // for (let i in arr) {
+    //   //   state.days[i].spots = arr[i];
+    //   // }
+    //   return {  ...state, id: action.id, appointments: appointments }
+    // }
     case SET_INTERVIEW: {
-
-      //updating available appointment object
-      const appointment = {
-        ...state.appointments[action.id],
-        interview: (action.interview ? {...action.interview} : null)
-      };
-
-      //adding new appointment to appointments
-      const appointments = {
-        ...state.appointments,
-        [action.id]: appointment
+      const { id, interview } = action;
+      return {
+        ...state,
+        days: state.days.map((day) => {
+          let spotCounter = 0;
+          if(day.name === state.day) {
+            if (interview && state.appointments[id].interview) {
+              spotCounter = 0;
+            } else if(interview) {
+              spotCounter = -1;
+            } else {
+              spotCounter = 1;
+            }
+          } 
+          return {...day,
+                  spots: day.spots + spotCounter};
+        }),
+        appointments: {
+          ...state.appointments,
+          [id]: {
+            ...state.appointments[action.id],
+            interview: action.interview ? {...interview} : null
+          } 
+        }
       }
-
-      return {  ...state, id: action.id, appointments: appointments }
     }
-
+    
     default:
       throw new Error(
         `Tried to reduce with unsupported action type: ${action.type}`
@@ -90,9 +144,9 @@ export default function useApplicationData() {
     //db update
     return axios.put(`/api/appointments/${newId}`, {interview})
           .then(() => {
-            if (!interviewExistence){
-              state.days[dayId-1].spots--
-            }
+            // if (!interviewExistence){
+            //   state.days[dayId-1].spots--
+            // }
             dispatch({type: SET_INTERVIEW, id, interview}) 
           })       
   } //closes bookInterview
@@ -108,9 +162,9 @@ export default function useApplicationData() {
     const newId = Number(id)
 
     //db update
-    return axios.delete(`http://localhost:8000/api/appointments/${newId}`)
+    return axios.delete(`/api/appointments/${newId}`)
       .then(() => {
-        state.days[dayId-1].spots++
+        // state.days[dayId-1].spots++
         dispatch({type: SET_INTERVIEW, id})
       })
   } //closes deleting interview
