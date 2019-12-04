@@ -38,12 +38,6 @@ export default function useApplicationData() {
   // ==== BOOKING INTERVIEW ==== //
   // booking new interview in available appointment spot
   const bookInterview = (id, interview) => {
-
-    //current day
-    const dayId = state.days.filter(day => day.name === state.day)[0].id
-
-    // checks if current appoint allready has an interivew scheduled - is this an edit?
-    let interviewExistence = state.appointments[id].interview
     
     //to integer to update db
     const newId = Number(id)
@@ -51,9 +45,6 @@ export default function useApplicationData() {
     //db update
     return axios.put(`/api/appointments/${newId}`, {interview})
           .then(() => {
-            // if (!interviewExistence){
-            //   state.days[dayId-1].spots--
-            // }
             dispatch({type: SET_INTERVIEW, id, interview}) 
           })       
   } //closes bookInterview
@@ -61,9 +52,6 @@ export default function useApplicationData() {
 
   // ==== Deleting Interview ==== //
   const deleteInterview = (id) => {
-
-    //current day
-    const dayId = state.days.filter(day => day.name === state.day)[0].id
     
     //to integer to update db
     const newId = Number(id)
@@ -71,7 +59,6 @@ export default function useApplicationData() {
     //db update
     return axios.delete(`/api/appointments/${newId}`)
       .then(() => {
-        // state.days[dayId-1].spots++
         dispatch({type: SET_INTERVIEW, id})
       })
   } //closes deleting interview
