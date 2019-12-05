@@ -2,9 +2,16 @@
 The Scheduler App allows you to book, edit and delete appointments in any of the available open slots for the week.
 Shut down server? no problem the database will be updated and remember your changes.
 
-!["Screenshot of: Making an Appointment"]()
-!["Screenshot of: Deleting an Appointment"]()
-!["Screenshot of: Editing an Appointment in Resposive Mode"]()
+## MAKE APPOINTMENT
+!["Screenshot of: Making an Appointment"](https://github.com/reverie-designs/scheduler/blob/master/public/docs/scheduler-make-appointment.gif)
+
+## EDIT APPOINTMENT
+!["Screenshot of: Editing an Appointment in Resposive Mode"](https://github.com/reverie-designs/scheduler/blob/master/public/docs/scheduler-edit-appointment.gif)
+
+## DELETE APPOINTMENT
+
+!["Screenshot of: Deleting an Appointment"](https://github.com/reverie-designs/scheduler/blob/master/public/docs/scheduler-delete-appointment.gif)
+
 
 ## Technical Specs 💻
 The Scheduler Client App was created using [create react app](https://create-react-app.dev/).
