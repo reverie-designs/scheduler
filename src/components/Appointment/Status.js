@@ -1,4 +1,7 @@
+//Status.js
+
 import React from "react"
+
 
 export default function Status({message}) {
   return (

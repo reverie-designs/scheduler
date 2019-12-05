@@ -1,7 +1,11 @@
+//useVisualMode.js
 // eslint-disable-next-line 
 import React, {useState} from "react";
 
+//manages the visual rendering and visual state of 
+//booking an appointment
 export default function useVisualMode(initial) {
+  
   const [mode, setMode] = useState(initial);
   const [history, setHistory] = useState([initial]);
 

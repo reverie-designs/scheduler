@@ -1,12 +1,14 @@
+//useApplicationData.js
 // eslint-disable-next-line 
 import React, {useEffect, useReducer} from "react"
 import axios from "axios"
 import reducer, {SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW} from "../reducers/application"
 
+
 export default function useApplicationData() {
   
   // ==== INITIAL STATE ==== //
-  //manages all tracked states of the app this is 
+  //manages all tracked states of the app 
   const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],

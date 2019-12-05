@@ -1,3 +1,5 @@
+//Button.js
+
 import React from "react"
 import "components/Button.scss"
 import classnames from "classnames"
@@ -5,10 +7,10 @@ import classnames from "classnames"
 
 export default function Button(props) {
    let buttonClass =classnames("button", {
-   "button--confirm": props.confirm, 
-   "button--danger": props.danger
+      "button--confirm": props.confirm, 
+      "button--danger": props.danger
    });
-   console.log(props);
+
    return (
    <button 
       className={buttonClass}
@@ -17,5 +19,5 @@ export default function Button(props) {
    >
       {props.children}
    </button>
-   ) //button test
+   ) 
 }

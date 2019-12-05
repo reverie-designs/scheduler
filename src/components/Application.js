@@ -1,3 +1,5 @@
+//Applications.js
+
 import React from "react"
 import "components/Application.scss"
 import DayList from "components/DayList"
@@ -5,7 +7,8 @@ import Appointment from "components/Appointment"
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors"
 import useApplicationData from "../hooks/useApplicationData"
 
-export default function Application(props) {
+
+export default function Application() {
   
   //Manages APP state
   const {state, setDay, bookInterview, deleteInterview} = useApplicationData()
@@ -19,23 +22,25 @@ export default function Application(props) {
   const interviewers = getInterviewersForDay(state, state.day)
 
 
-  //takes in the current day's appointments array and returns a components for each appointment in the array     
+  //takes in the current day's appointments array and returns a components for each appointment in the array
+  //This functions get called in the "schedule" section below
   const printAppoints = appointments.map(appointment => {
+
       return (
-        <Appointment 
-          key={appointment.id}
-          id={appointment.id}
-          time={appointment.time}
-          interview={getInterview(state, appointment.interview)}
-          interviewers = {interviewers}
-          bookInterview = {bookInterview}
-          deleteInterview = {deleteInterview}
-        />
+                <Appointment 
+                            key={appointment.id}
+                            id={appointment.id}
+                            time={appointment.time}
+                            interview={getInterview(state, appointment.interview)}
+                            interviewers = {interviewers}
+                            bookInterview = {bookInterview}
+                            deleteInterview = {deleteInterview}
+                />
       )
   }) 
 
   
-  //due to css neeed to add this at appointments render for last appoint
+  //due to css need to add this at appointments render for last appoint
   let lastApp = <Appointment key="last" time="5pm" />;
   printAppoints.push(lastApp)
 
@@ -57,9 +62,9 @@ export default function Application(props) {
         <nav className="sidebar__menu">
 
             <DayList
-              days={state.days}
-              day = {state.day}
-              setDay={setDay}
+                    days={state.days}
+                    day = {state.day}
+                    setDay={setDay}
             />
             
         </nav>

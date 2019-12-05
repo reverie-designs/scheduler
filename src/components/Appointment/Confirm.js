@@ -1,5 +1,8 @@
+//Confirm.js
+
 import React from "react"
 import Button from "../Button"
+
 
 export default function Confrim({message, onCancel, onConfirm}) {
   return (

@@ -1,7 +1,9 @@
+//Application.test.js
+
 import React from "react"
 import { 
   render, cleanup, waitForElement, 
-  getByText, prettyDOM, getAllByTestId, 
+  getByText, getAllByTestId, 
   getByAltText, getByPlaceholderText, 
   queryByText, queryByAltText
 } from "@testing-library/react"

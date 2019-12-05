@@ -1,17 +1,21 @@
+//Form.js
+
 import React, {useState} from "react"
 import InterviewerList from "../InterviewerList"
 import Button from "../Button"
+
 
 export default function Form(props) {
   const [name, setName] = useState(props.name || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
   
+  //on cancel reset appointment input and interview selection
   const reset = () => {
     props.onCancel(setInterviewer(null),
     setName(""))
   }
 
-
+  //validating that the input field is not empty
   function validate() {
     if (name === "") {
       setError("Student name cannot be blank");
@@ -42,8 +46,13 @@ export default function Form(props) {
           <section className="appointment__validation">{error}</section>
           
         </form>
-        <InterviewerList interviewers={props.interviewers} value={interviewer} onChange={setInterviewer}/>
 
+        <InterviewerList 
+          interviewers={props.interviewers} 
+          value={interviewer} 
+          onChange={setInterviewer}
+        />
+        
       </section>
 
       <section className="appointment__card-right">
@@ -52,7 +61,6 @@ export default function Form(props) {
 
           <Button  danger onClick={reset}>Cancel</Button>
           <Button  confirm onClick={validate}>Save</Button>
-          {/* <Button  confirm onClick={()=>props.onSave(name, interviewer)}>Save</Button> */}
 
         </section>
 

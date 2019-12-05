@@ -1,3 +1,5 @@
+// axios.js
+
 const fixtures = {
   days: [
     {
@@ -53,7 +55,6 @@ const fixtures = {
   }
 };
 
-console.log("=================================CALL MOCK DATA");
 
 export default {
   
@@ -95,7 +96,6 @@ export default {
     }
   }),
   delete: jest.fn(url => {
-    console.log('============DELETE=============');
     if (url === "/api/appointments/1" || url === "/api/appointments/2") {
       return Promise.resolve({
         status: 204, 

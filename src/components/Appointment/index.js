@@ -1,3 +1,4 @@
+//index.js
 // eslint-disable-next-line
 import React from "react"
 import "./styles.scss"
@@ -10,6 +11,7 @@ import Confirm from "./Confirm"
 import Error from "./Error"
 import useVisualMode from "../../hooks/useVisualMode"
 
+
 const EMPTY = "EMPTY"
 const SHOW = "SHOW"
 const CREATE = "CREATE"
@@ -20,6 +22,7 @@ const EDIT = "EDIT"
 const ERROR_SAVE = "ERROR_SAVE"
 const ERROR_DELETE = "ERROR_DELETE"
 
+//error msgs
 const message = {
                     save: "Saving",
                     delete: "Deleting",
@@ -40,8 +43,8 @@ export default function Appointment({id, time, interviewers, interview, bookInte
     }
 
     bookInterview(id, interview)
-    .then(() => transition(SHOW))
-    .catch(error => {transition(ERROR_SAVE, true)})
+      .then(() => transition(SHOW))
+      .catch(error => {transition(ERROR_SAVE, true)})
   }
 
   const deleting = () => {
@@ -51,40 +54,56 @@ export default function Appointment({id, time, interviewers, interview, bookInte
   const confirmDelete = () => {
     transition(DELETING, true)
     deleteInterview(id)
-    .then(()=> transition(EMPTY))
-    .catch(error => {transition(ERROR_DELETE, true)})     
+      .then(()=> transition(EMPTY))
+      .catch(error => {transition(ERROR_DELETE, true)})     
   }
 
   return (
-  <article className="appointment" data-testid="appointment">
-    <Header time={time}/>
-    {mode === EMPTY && <Empty onAdd={()=>transition(CREATE)} />}
-    {mode === SHOW && (
-          <Show 
-            student = {interview.student}
-            interviewer = {interview.interviewer}
-            onDelete = {deleting}
-            onEdit = {()=>transition(EDIT)}
-          />
-    )}
-    {mode === CREATE && (
-          <Form interviewers = {interviewers} onSave = {save} onCancel = {back} 
-          />
-    )}
-    {mode === SAVING && <Status message={message.save}/>}
-    {mode === CONFIRM && 
-          <Confirm onCancel = {back} onConfirm = {confirmDelete}
-                   message={message.confirm}
-          />
-    }
-    {mode === DELETING && <Status message={message.delete}/>}
-    {mode === EDIT && 
-          <Form interviewers = {interviewers} name = {interview.student} 
-                interviewer = {interview.interviewer.id} onCancel = {back} onSave = {save}
-          />
-    }
-    {mode === ERROR_SAVE && <Error message={message.saveError} onClose = {back}/>}
-    {mode === ERROR_DELETE && <Error message={message.deleteError} onClose = {back}/>}
-  </article>
+            <article className="appointment" data-testid="appointment">
+              
+              <Header time={time}/>
+
+              {mode === EMPTY && <Empty onAdd={()=>transition(CREATE)} />}
+
+              {mode === SHOW && (
+                    <Show 
+                      student = {interview.student}
+                      interviewer = {interview.interviewer}
+                      onDelete = {deleting}
+                      onEdit = {()=>transition(EDIT)}
+                    />
+              )}
+
+              {mode === CREATE && (
+                    <Form interviewers = {interviewers} onSave = {save} onCancel = {back} 
+                    />
+              )}
+
+              {mode === SAVING && <Status message={message.save}/>}
+
+              {mode === CONFIRM && 
+                    <Confirm 
+                            onCancel = {back} 
+                            onConfirm = {confirmDelete}
+                            message={message.confirm}
+                    />
+              }
+
+              {mode === DELETING && <Status message={message.delete}/>}
+
+              {mode === EDIT && 
+                    <Form 
+                          interviewers = {interviewers} 
+                          name = {interview.student} 
+                          interviewer = {interview.interviewer.id} 
+                          onCancel = {back} onSave = {save}
+                    />
+              }
+
+              {mode === ERROR_SAVE && <Error message={message.saveError} onClose = {back}/>}
+
+              {mode === ERROR_DELETE && <Error message={message.deleteError} onClose = {back}/>}
+              
+            </article>
   )
 }

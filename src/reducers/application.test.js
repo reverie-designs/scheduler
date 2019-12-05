@@ -1,3 +1,5 @@
+//application.test.js
+
 import reducer from "reducers/application";
 
 describe("Application Reducer", () => {

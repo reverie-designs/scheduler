@@ -1,5 +1,6 @@
-import React from "react"
+// Empty.js
 
+import React from "react"
 
 export default function Empty(props) {
   return (
