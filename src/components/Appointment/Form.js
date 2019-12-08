@@ -14,6 +14,7 @@ export default function Form(props) {
     props.onCancel(setInterviewer(null),
     setName(""))
   }
+  const [error, setError] = useState("");
 
   //validating that the input field is not empty
   function validate() {
@@ -25,7 +26,6 @@ export default function Form(props) {
     props.onSave(name, interviewer);
   }
 
-  const [error, setError] = useState("");
 
   return (
     <main className="appointment__card appointment__card--create">

@@ -1,6 +1,6 @@
 //index.js
 // eslint-disable-next-line
-import React from "react"
+import React, {useEffect} from "react"
 import "./styles.scss"
 import Header from "./Header"
 import Show from "./Show"
@@ -21,6 +21,7 @@ const CONFIRM = "CONFIRM"
 const EDIT = "EDIT"
 const ERROR_SAVE = "ERROR_SAVE"
 const ERROR_DELETE = "ERROR_DELETE"
+const ERROR_INTREVIEW = "ERROR_INTREVIEW"
 
 //error msgs
 const message = {
@@ -28,13 +29,17 @@ const message = {
                     delete: "Deleting",
                     saveError: "Couldn't Save. Please try again later.",
                     deleteError: "Couldn't Delete. Please try again later.",
-                    confirm: "Are you sure you wish to delete this appointment?"
+                    confirm: "Are you sure you wish to delete this appointment?",
+                    interviewer: "Please select an interviewer"
 }
 
 export default function Appointment({id, time, interviewers, interview, bookInterview, deleteInterview}) {
+  const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY);
 
-  const {mode, transition, back} = useVisualMode( interview ? SHOW : EMPTY)
 
+  const validate = (name, interviewer) => {
+    !interviewer ? transition(ERROR_INTREVIEW, true) : save(name, interviewer);
+  }
   const save = (name, interviewer) => {
     transition(SAVING);
     const interview = {
@@ -44,7 +49,7 @@ export default function Appointment({id, time, interviewers, interview, bookInte
 
     bookInterview(id, interview)
       .then(() => transition(SHOW))
-      .catch(error => {transition(ERROR_SAVE, true)})
+      .catch(() => {transition(ERROR_SAVE, true)})
   }
 
   const deleting = () => {
@@ -55,7 +60,7 @@ export default function Appointment({id, time, interviewers, interview, bookInte
     transition(DELETING, true)
     deleteInterview(id)
       .then(()=> transition(EMPTY))
-      .catch(error => {transition(ERROR_DELETE, true)})     
+      .catch(() => {transition(ERROR_DELETE, true)})     
   }
 
   return (
@@ -65,7 +70,7 @@ export default function Appointment({id, time, interviewers, interview, bookInte
 
               {mode === EMPTY && <Empty onAdd={()=>transition(CREATE)} />}
 
-              {mode === SHOW && (
+              {mode === SHOW && interview && (
                     <Show 
                       student = {interview.student}
                       interviewer = {interview.interviewer}
@@ -75,7 +80,7 @@ export default function Appointment({id, time, interviewers, interview, bookInte
               )}
 
               {mode === CREATE && (
-                    <Form interviewers = {interviewers} onSave = {save} onCancel = {back} 
+                    <Form interviewers = {interviewers} onSave = {validate} onCancel = {back} 
                     />
               )}
 
@@ -103,6 +108,7 @@ export default function Appointment({id, time, interviewers, interview, bookInte
               {mode === ERROR_SAVE && <Error message={message.saveError} onClose = {back}/>}
 
               {mode === ERROR_DELETE && <Error message={message.deleteError} onClose = {back}/>}
+              {mode === ERROR_INTREVIEW && <Error message={message.interviewer} onClose = {back}/>}
               
             </article>
   )
