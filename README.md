@@ -102,8 +102,4 @@ __Both servers run concurrently:__
 
 You must have have __postgreSQL__ or a VM that has __postgreSQL__ to run the db server
 
-## Known Errors ⛔
-You __must__ select an interviewer in order to book an appointment 
-
-
 
