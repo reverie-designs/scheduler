@@ -25,6 +25,31 @@ export default function useApplicationData() {
   // ==== DB REQUEST ON APP LOAD ====//
   // Loads data from api then add to states that are being tracked 
   useEffect(()=>{
+    
+    //SOCKETS
+    const socket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
+    socket.addEventListener('open', () => {
+      console.log('connected to server')
+      socket.send('ping')
+    })
+
+    // socket.onmessage = msg => {
+    //   const data = JSON.parse(msg.data);
+    //   data.type === SET_INTERVIEW && dispatch({ ...data });
+    // }
+
+    socket.onmessage = msg => {
+      const data = JSON.parse(msg.data);
+      data.type === SET_INTERVIEW && dispatch({ ...data, fromRemote: true })
+    }
+
+    // webSocket.addEventListener("message", msg => {
+    //   const data = JSON.parse(msg.data);
+    //   dispatch({
+    //     ...data,
+    //     fromRemote: true
+    //   })
+    //API REQUESTS
     Promise.all([
       axios.get("/api/days"), 
       axios.get("/api/appointments"), 
@@ -33,7 +58,8 @@ export default function useApplicationData() {
     .then((all)=> {
         dispatch({type: SET_APPLICATION_DATA, days: all[0].data, appointments: all[1].data, interviewers: all[2].data})
       })
-    }, []
+    return () => socket.close();
+    },[]
   )//close useEffect
 
 

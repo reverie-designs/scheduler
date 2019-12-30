@@ -62,6 +62,16 @@ export default function Appointment({id, time, interviewers, interview, bookInte
       .then(()=> transition(EMPTY))
       .catch(() => {transition(ERROR_DELETE, true)})     
   }
+ 
+
+  useEffect(() => {
+    if (interview && mode === EMPTY) {
+     transition(SHOW)
+    }
+    if (interview === null && mode === SHOW) {
+     transition(EMPTY)
+    }
+   }, [interview, transition, mode])
 
   return (
             <article className="appointment" data-testid="appointment">
